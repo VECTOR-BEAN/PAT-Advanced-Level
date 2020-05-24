@@ -7,7 +7,6 @@ using namespace std;
 const int MAXN = 500;
 const int INF = 0x3f3f3f3f;
 int N, M, src, dst, teams[MAXN];
-int vis[MAXN], dist[MAXN], pnums[MAXN], totalTeam[MAXN];
 
 struct Road{
 	int dest, length;
@@ -18,10 +17,11 @@ struct Road{
 vector<Road> Graph[MAXN];
 
 void dijkstra() {
+	int vis[MAXN], dist[MAXN], pnums[MAXN], totalTeam[MAXN];
 	memset(vis, 0, sizeof(vis));
 	fill(dist, dist+MAXN, INF);
-	memset(totalTeam, 0, sizeof(totalTeam));
 	memset(pnums, 0, sizeof(pnums));
+	memset(totalTeam, 0, sizeof(totalTeam));
 
 	dist[src] = 0, totalTeam[src] = teams[src], pnums[src] = 1;
 
