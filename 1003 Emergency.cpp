@@ -7,6 +7,7 @@ using namespace std;
 const int MAXN = 500;
 const int INF = 0x3f3f3f3f;
 int N, M, src, dst, teams[MAXN];
+int pnums[MAXN], maxTeam[MAXN];
 
 struct Road{
 	int dest, length;
@@ -17,13 +18,13 @@ struct Road{
 vector<Road> Graph[MAXN];
 
 void dijkstra() {
-	int vis[MAXN], dist[MAXN], pnums[MAXN], totalTeam[MAXN];
+	int vis[MAXN], dist[MAXN];
 	memset(vis, 0, sizeof(vis));
 	fill(dist, dist+MAXN, INF);
 	memset(pnums, 0, sizeof(pnums));
-	memset(totalTeam, 0, sizeof(totalTeam));
+	memset(maxTeam, 0, sizeof(maxTeam));
 
-	dist[src] = 0, totalTeam[src] = teams[src], pnums[src] = 1;
+	dist[src] = 0, maxTeam[src] = teams[src], pnums[src] = 1;
 
 	for(int i=0; i<N; i++){
 		int u = -1, minDist = INF;
@@ -40,13 +41,13 @@ void dijkstra() {
 			if(!vis[road.dest]){
 				if(minDist + road.length < dist[road.dest]) {
 					dist[road.dest] = minDist + road.length;
-					totalTeam[road.dest] = totalTeam[u] + teams[road.dest];
+					maxTeam[road.dest] = maxTeam[u] + teams[road.dest];
 					pnums[road.dest] = pnums[u];
 				}
 				else if(minDist + road.length == dist[road.dest]){
 					pnums[road.dest] += pnums[u];
-					if(totalTeam[u] + teams[road.dest] > totalTeam[road.dest]) 
-						totalTeam[road.dest] = totalTeam[u] + teams[road.dest];
+					if(maxTeam[u] + teams[road.dest] > maxTeam[road.dest]) 
+						maxTeam[road.dest] = maxTeam[u] + teams[road.dest];
 				}
 			}
 		}
@@ -63,7 +64,7 @@ int main(){
 		Graph[d].push_back(Road(s, dis));
 	}
 	dijkstra();
-	printf("%d %d\n", pnums[dst], totalTeam[dst]);
+	printf("%d %d\n", pnums[dst], maxTeam[dst]);
 	return 0;
 }
 
