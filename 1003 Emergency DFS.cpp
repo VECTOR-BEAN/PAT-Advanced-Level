@@ -7,24 +7,27 @@ using namespace std;
 const int MAXN = 500;
 const int INF = 0x3f3f3f3f;
 int N, M, src, dst, teams[MAXN];
-int vis[MAXN], dist[MAXN], pnums[MAXN], totalTeam[MAXN];
+int pathNum = 0, maxTeam = 0;
 
 struct Road{
 	int dest, length;
 	Road(){};
-	Road(int dst, int len): dest(dst), length(len){}
+	Road(int _dest, int _dist): dest(_dest), length(_dist){}
 };
 
+vector<int> pre[MAXN];
+vector<int> path, tempPath;
 vector<Road> Graph[MAXN];
 
 void dijkstra() {
+
+	/* init */
+	int vis[MAXN], dist[MAXN];
 	memset(vis, 0, sizeof(vis));
 	fill(dist, dist+MAXN, INF);
-	memset(totalTeam, 0, sizeof(totalTeam));
-	memset(pnums, 0, sizeof(pnums));
+	dist[src] = 0;
 
-	dist[src] = 0, totalTeam[src] = teams[src], pnums[src] = 1;
-
+	/* find the nearest city */
 	for(int i=0; i<N; i++){
 		int u = -1, minDist = INF;
 		for(int j=0; j<N; j++){
@@ -34,27 +37,43 @@ void dijkstra() {
 			}
 		}
 
-		if(u == -1) return;
+		if(u == -1) return;  // if all cities are visited
 		vis[u] = 1;
 		for(auto road: Graph[u]) {
 			if(!vis[road.dest]){
 				if(minDist + road.length < dist[road.dest]) {
 					dist[road.dest] = minDist + road.length;
-					totalTeam[road.dest] = totalTeam[u] + teams[road.dest];
-					pnums[road.dest] = pnums[u];
+					pre[road.dest].clear();
+					pre[road.dest].push_back(u);
 				}
 				else if(minDist + road.length == dist[road.dest]){
-					pnums[road.dest] += pnums[u];
-					if(totalTeam[u] + teams[road.dest] > totalTeam[road.dest]) 
-						totalTeam[road.dest] = totalTeam[u] + teams[road.dest];
+					pre[road.dest].push_back(u);
 				}
 			}
 		}
 	}
 }
 
+void DFS(int v){
+	tempPath.push_back(v);
+	if(v == src) {
+		pathNum++;
+		int teamNum = 0;
+		for(auto city: tempPath) teamNum += teams[city];
+		if(teamNum > maxTeam) {
+			maxTeam = teamNum;
+			path = tempPath;
+		}
+	}
+	else{
+		for(auto city: pre[v]) {
+			DFS(city);
+		}
+	}
+	tempPath.pop_back();
+}
+
 int main(){
-	memset(teams, 0, sizeof(teams));
 	scanf("%d%d%d%d", &N, &M, &src, &dst);
 	for(int i=0; i<N; i++) scanf("%d", &teams[i]);
 	for(int i=0, s, d, dis; i<M; i++) {
@@ -63,7 +82,8 @@ int main(){
 		Graph[d].push_back(Road(s, dis));
 	}
 	dijkstra();
-	printf("%d %d\n", pnums[dst], totalTeam[dst]);
+	DFS(dst);
+	printf("%d %d\n", pathNum, maxTeam);
 	return 0;
 }
 
