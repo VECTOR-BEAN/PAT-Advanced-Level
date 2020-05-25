@@ -29,4 +29,5 @@ int main(){
 	printf("%s ", records.front().id);
 	sort(records.begin(), records.end(), cmpOut);
 	printf("%s\n", records.front().id);
+	return 0;
 }
