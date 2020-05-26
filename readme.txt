@@ -1,1 +1,0 @@
-This is a CPP solution of PAT Advanced Level Practice Problem set.
