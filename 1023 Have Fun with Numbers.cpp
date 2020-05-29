@@ -18,8 +18,9 @@ int main() {
 		cnt[res[size]]--;
 	}
 	if(carry != 0) res[size++] = carry;
+
 	for(auto i:cnt) {
-		if(i != 0) {
+		if(i != 0 || size > len) {
 			flag = 0;
 			break;
 		}
