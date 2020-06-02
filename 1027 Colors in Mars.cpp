@@ -9,7 +9,3 @@ int main() {
 	printf("\n");
 	return 0;
 }
-/*
-15 43 71
-#123456
-*/

@@ -25,6 +25,5 @@ int main() {
 	for(auto stu: stus) {
 		printf("%06d %s %d\n", stu.id, stu.name.c_str(), stu.score);
 	}
-	printf("\n");
 	return 0;
 }

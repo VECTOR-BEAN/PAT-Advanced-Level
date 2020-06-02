@@ -1,19 +1,21 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-vector<int> nums[2];
+constexpr int MAXN = 200000;
+constexpr int INF = 0x3f3f3f3f;
+int Seq1[MAXN], Seq2[MAXN];
 
 int main() {
-	int i, j, n;
-	for(i = 0; i < 2; i++) {
-		scanf("%d", &n);
-		nums[i].resize(n);
-		for(j = 0; j < n; j++) scanf("%d", &nums[i][j]);
+	int i, j, m, n, pos;
+	scanf("%d", &m);
+	for(i = 0; i < m; i++) scanf("%d", &Seq1[i]);
+	scanf("%d", &n);
+	for(j = 0; j < n; j++) scanf("%d", &Seq2[j]);
+	Seq1[m] = Seq2[n] = INF;
+	i = j = 0, pos = m + n - 1;
+	while(i + j < pos/2) {
+		Seq1[i] < Seq2[j]?(i++):(j++); 
 	}
-	i = j = 0, n = nums[0].size() + nums[1].size() - 1;
-	while(i + j < n/2) {
-		(nums[0][i] < nums[1][j])?(i++):(j++); 
-	}
-	printf("%d\n", nums[0][i] <= nums[1][j]?nums[0][i]:nums[1][j]);
+	printf("%d\n", Seq1[i]<= Seq2[j]?Seq1[i]:Seq2[j]);
 	return 0;
 }
