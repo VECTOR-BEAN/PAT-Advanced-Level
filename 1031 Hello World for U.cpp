@@ -18,8 +18,7 @@ int main() {
 		for(int j = 0; j < n2 - 2; j++) printf(" ");
 		printf("%c\n", str[n-1-i]);
 	}
-	for(int i = n1 - 1; i < n1+n2-1; i++) {
-		printf("%c", str[i]);
-	}
+	for(int i = n1 - 1; i < n1+n2-1; i++) printf("%c", str[i]);
 	printf("\n");
+	return 0;
 }
