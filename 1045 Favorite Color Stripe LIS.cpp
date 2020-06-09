@@ -17,14 +17,14 @@ int main() {
 	scanf("%d", &l);
 	for(int i = 0, c; i < l; i++) {
 		scanf("%d", &c);
-		if(fav[c]) strip[len++] = c;
+		if(fav[c]) strip[len++] = fav[c];
 	}
 	for(int i = 0; i < len; i++) {
 		dp[i] = 1;
 		for(int j = 0; j < i; j++)
-			if(fav[strip[i]] >= fav[strip[j]] && dp[i] <= dp[j]) 
+			if(strip[i] >= strip[j] && dp[i] <= dp[j]) 
 				dp[i] = dp[j] + 1;
+        if(dp[i] > maximum) maximum = dp[i];
 	}
-	for(int i = 0; i < len; i++) if (dp[i] > maximum) maximum = dp[i];
 	printf("%d\n", maximum);
 }
