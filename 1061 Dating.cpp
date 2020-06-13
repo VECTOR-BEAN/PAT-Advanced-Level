@@ -11,7 +11,7 @@ int main() {
 			flag = 1;
 		}
 		else if(flag && (between('A', 'N', a[i]) || between('0', '9', a[i]))){
-			printf("%02d:", (a[i]>='0' && a[i] <= '9')?a[i]-'0':a[i]-'A'+10);
+			printf("%02d:", between('0', '9', a[i])?a[i]-'0':a[i]-'A'+10);
 			break;
 		}
 	}
