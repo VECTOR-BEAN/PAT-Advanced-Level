@@ -21,5 +21,3 @@ int main(){
 	printf("\n");
 	return 0;
 }
-
-// positive coefficient plus negative coefficient could be zero
