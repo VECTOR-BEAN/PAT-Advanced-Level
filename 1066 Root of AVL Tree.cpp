@@ -6,12 +6,12 @@ typedef struct Node {
 } *pNode;
 int getHeight(pNode pnode) { return pnode == NULL ? 0 : pnode->height; }
 int getBF(pNode pnode) { return getHeight(pnode->lchild) - getHeight(pnode->rchild); }
+void updateHeight(pNode pnode) { pnode->height = max(getHeight(pnode->lchild), getHeight(pnode->rchild)) + 1; }
 pNode newNode(int value) {
 	pNode node = new Node;
 	node->value = value; node->height = 1; node->lchild = node->rchild = NULL;
 	return node;
 }
-void updateHeight(pNode pnode) { pnode->height = max(getHeight(pnode->lchild), getHeight(pnode->rchild)) + 1; }
 void rotateLeft(pNode& root) {
 	pNode temp = root->rchild;
 	root->rchild = temp->lchild;
