@@ -38,7 +38,7 @@ int main() {
 	for (int i = 0; i < m; i++) {
 		vector<int>& admitted = schools[i].admitted;
 		sort(admitted.begin(), admitted.end(), [](const int& a, const int& b) {return applicants[a].index < applicants[b].index; });
-		for (auto& id : admitted) {
+		for (const int& id : admitted) {
 			printf("%d", applicants[id].index);
 			if(id != admitted.back()) putchar(' ');
 		}

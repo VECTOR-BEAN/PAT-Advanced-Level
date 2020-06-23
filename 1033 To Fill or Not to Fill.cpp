@@ -3,12 +3,9 @@
 #include<algorithm>
 using namespace std;
 constexpr int INF = 0x3f3f3f3f;
-
 struct Station {
 	double price, dist;
 }newStation;
-
-bool cmp(Station a, Station b) { return a.dist < b.dist; }
 
 int main() {
 	int n, now = 0;
@@ -21,7 +18,7 @@ int main() {
 	}
 	newStation.price = 0, newStation.dist = dist;
 	stations.push_back(newStation);
-	sort(stations.begin(), stations.end(), cmp);
+	sort(stations.begin(), stations.end(), [](const Station& a, const Station& b) { return a.dist < b.dist; });
 	if (stations.empty() || stations.front().dist != 0) {
 		printf("The maximum travel distance = 0.00\n");
 		return 0;
