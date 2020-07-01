@@ -10,8 +10,7 @@ struct Query {
 } query[MAXM];
 unordered_map<string, set<int>> lib[5];
 int main() {
-	int n, m;
-	string key;
+	int n, m; string key;
 	scanf("%d\n", &n);
 	for (int i = 0, id; i < n; i++) {
 		scanf("%d\n", &id);
