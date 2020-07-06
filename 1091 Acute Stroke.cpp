@@ -5,7 +5,7 @@ int n, m, l, thrhd, brain[1286][128][60], inq[1286][128][60];
 struct Node {
 	int x, y, z;
 	Node operator+(const Node& offset) const { return { x + offset.x, y + offset.y, z + offset.z }; }
-} temp, front;
+};
 Node offsets[6] = { {1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {-1, 0, 0}, {0, -1, 0}, {0, 0, -1} };
 
 bool valid(const Node& node) {
@@ -16,9 +16,9 @@ bool valid(const Node& node) {
 int BFS(int x, int y, int z) {
 	int cnt = 1; queue<Node> q;
 	for (q.push({x, y, z}); !q.empty(); q.pop()) {
-		front = q.front();
+		const Node& front = q.front();
 		for (const Node& offset : offsets) {
-			temp = front + offset;
+			Node temp = front + offset;
 			if (valid(temp) && brain[temp.x][temp.y][temp.z] && !inq[temp.x][temp.y][temp.z]) {
 				inq[temp.x][temp.y][temp.z] = true;
 				q.push(temp); cnt++;
