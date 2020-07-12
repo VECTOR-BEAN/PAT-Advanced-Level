@@ -78,17 +78,17 @@ int main() {
 	for(int p = dest; p != -1; p = costPath[p]) ansTime.push_back(p);
 	if(ansDist == ansTime) {
 		printf("Distance = %d; Time = %d: ", dist[dest], cost[dest]);
-		for(auto it = ansDist.rbegin(); it != ansDist.rend(); ++it) {
+		for(auto it = ansDist.crbegin(); it != ansDist.crend(); ++it) {
 			printf("%d%s", *it, *it == ansDist.front() ? "\n" : " -> ");
 		}
 	}
 	else {
 		printf("Distance = %d: ", dist[dest]);
-		for(auto it = ansDist.rbegin(); it != ansDist.rend(); ++it) {
+		for(auto it = ansDist.crbegin(); it != ansDist.crend(); ++it) {
 			printf("%d%s", *it, *it == ansDist.front() ? "\n" : " -> ");
 		}
 		printf("Time = %d: ", cost[dest]);
-		for(auto it = ansTime.rbegin(); it != ansTime.rend(); ++it) {
+		for(auto it = ansTime.crbegin(); it != ansTime.crend(); ++it) {
 			printf("%d%s", *it, *it == ansTime.front() ? "\n" : " -> ");
 		}
 	}
