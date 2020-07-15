@@ -1,69 +1,48 @@
-#include<cstdio>
-#include<algorithm>
-#include<memory.h>
+#include<iostream>
 #include<vector>
 using namespace std;
-
 const int MAXN = 500;
-const int INF = 0x3f3f3f3f;
-int N, M, src, dst, teams[MAXN];
-int pnums[MAXN], maxTeam[MAXN];
-
-struct Road{
+const int INF = 0x3fffffff;
+struct Node {
 	int dest, length;
-	Road(){};
-	Road(int dst, int len): dest(dst), length(len){}
 };
-
-vector<Road> Graph[MAXN];
-
-void dijkstra() {
-	int vis[MAXN], dist[MAXN];
-	memset(vis, 0, sizeof(vis));
-	fill(dist, dist+MAXN, INF);
-	memset(pnums, 0, sizeof(pnums));
-	memset(maxTeam, 0, sizeof(maxTeam));
-
-	dist[src] = 0, maxTeam[src] = teams[src], pnums[src] = 1;
-
-	for(int i=0; i<N; i++){
+int team[MAXN], maxTeam[MAXN], pathNum[MAXN], vis[MAXN], dist[MAXN];
+vector<Node> graph[MAXN];
+void dijkstra(const int& src, const int& n) {
+	fill(dist, dist + MAXN, INF);
+	dist[src] = 0; pathNum[src] = 1; maxTeam[src] = team[src];
+	for (int i = 0; i < n; i++) {
 		int u = -1, minDist = INF;
-		for(int j=0; j<N; j++){
-			if(!vis[j] && dist[j] < minDist) {
-				u = j;
-				minDist = dist[j];
-			}
+		for (int j = 0; j < n; j++) {
+			if (vis[j] || dist[j] > minDist) continue;
+			u = j; minDist = dist[j];
 		}
-
-		if(u == -1) return;
-		vis[u] = 1;
-		for(auto road: Graph[u]) {
-			if(!vis[road.dest]){
-				if(minDist + road.length < dist[road.dest]) {
-					dist[road.dest] = minDist + road.length;
-					maxTeam[road.dest] = maxTeam[u] + teams[road.dest];
-					pnums[road.dest] = pnums[u];
-				}
-				else if(minDist + road.length == dist[road.dest]){
-					pnums[road.dest] += pnums[u];
-					if(maxTeam[u] + teams[road.dest] > maxTeam[road.dest]) 
-						maxTeam[road.dest] = maxTeam[u] + teams[road.dest];
-				}
+		if (u == -1) return;
+		vis[u] = true;
+		for (const Node& node : graph[u]) {
+			if (vis[node.dest]) continue;
+			if (minDist + node.length < dist[node.dest]) {
+				dist[node.dest] = minDist + node.length;
+				pathNum[node.dest] = pathNum[u];
+				maxTeam[node.dest] = maxTeam[u] + team[node.dest];
+			}
+			else if (minDist + node.length == dist[node.dest]) {
+				pathNum[node.dest] += pathNum[u];
+				if (maxTeam[u] + team[node.dest] > maxTeam[node.dest]) 
+					maxTeam[node.dest] = maxTeam[u] + team[node.dest];
 			}
 		}
 	}
 }
-
-int main(){
-	memset(teams, 0, sizeof(teams));
-	scanf("%d%d%d%d", &N, &M, &src, &dst);
-	for(int i=0; i<N; i++) scanf("%d", &teams[i]);
-	for(int i=0, s, d, dis; i<M; i++) {
+int main() {
+	int n, m, src, dst; scanf("%d%d%d%d", &n, &m, &src, &dst);
+	for (int i = 0; i < n; i++) scanf("%d", &team[i]);
+	for (int i = 0, s, d, dis; i < m; i++) {
 		scanf("%d%d%d", &s, &d, &dis);
-		Graph[s].push_back(Road(d, dis));
-		Graph[d].push_back(Road(s, dis));
+		graph[s].push_back({ d, dis });
+		graph[d].push_back({ s, dis });
 	}
-	dijkstra();
-	printf("%d %d\n", pnums[dst], maxTeam[dst]);
+	dijkstra(src, n);
+	printf("%d %d\n", pathNum[dst], maxTeam[dst]);
 	return 0;
 }
