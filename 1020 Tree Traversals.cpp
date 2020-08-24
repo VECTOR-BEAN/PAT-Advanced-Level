@@ -1,26 +1,32 @@
-#include<cstdio>
-#include<map>
+#include<iostream>
+#include<queue>
 using namespace std;
 constexpr int MAXN = 30;
-int in[MAXN], post[MAXN];
-map<int, int> tree;
-void buildTree(int index, int inL, int inR, int postL, int postR) {
-	if(inL > inR || postL > postR) return;
-	int i;
-	for(i = inL; i <= inR && in[i] != post[postR]; i++);
-	tree[index] = post[postR];
-	buildTree(2*index, inL, i-1, postL, postL - 1 + i - inL);
-	buildTree(2*index + 1, i+1, inR, postL - inL + i, postR - 1);
+int post[MAXN];
+struct Node {
+	int val, lchild, rchild;
+	Node() : lchild(-1), rchild(-1) {}
+}nodes[MAXN];
+int buildTree(const int& inL, const int& postL, const int& len) {
+	for (int subLen = 0; subLen < len; subLen++) {
+		if (nodes[inL + subLen].val != post[postL + len - 1]) continue;
+		nodes[inL + subLen].lchild = buildTree(inL, postL, subLen);
+		nodes[inL + subLen].rchild = buildTree(inL + subLen + 1, postL + subLen, len - subLen - 1);
+		return inL + subLen;
+	}
+	return -1;
 }
 int main() {
-	int n;
-	scanf("%d", &n);
-	for(int i = 0; i < n; i++) scanf("%d", &post[i]);
-	for(int i = 0; i < n; i++) scanf("%d", &in[i]);
-	buildTree(1, 0, n-1, 0, n-1);
-	auto it = tree.begin();
-	for(int i = tree.size() - 1; i >= 0; i--, it++) {
-		printf("%d%c", it->second, (i == 0)?'\n':' ');
+	int n, root; scanf("%d", &n);
+	for (int i = 0; i < n; i++) scanf("%d", &post[i]);
+	for (int i = 0; i < n; i++) scanf("%d", &nodes[i].val);
+	root = buildTree(0, 0, n);
+	queue<int> q;
+	for(q.push(root); !q.empty(); q.pop()) {
+		const Node& node = nodes[q.front()];
+		if(node.lchild != -1) q.push(node.lchild);
+		if(node.rchild != -1) q.push(node.rchild);
+		printf("%d%c", node.val, q.size() == 1 ? '\n' : ' ');
 	}
 	return 0;
 }

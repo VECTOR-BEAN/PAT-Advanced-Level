@@ -1,49 +1,32 @@
-#include <cstdio>
+#include <iostream>
 #include <vector>
 #include <queue>
 using namespace std;
-const int MAXN = 100;
-
-struct Node {
-    int layer;
-    vector<int> son;
-} tree[MAXN];
-
-int maxLayer = 1, leaf[MAXN] = {0};
-
-void BFS() {
-    queue<Node> q;
-    tree[1].layer = 1;
-    q.push(tree[1]);
-    while (!q.empty()) {
-        Node node = q.front();
-        q.pop();
-		if (node.layer > maxLayer) maxLayer = node.layer;
-        if (node.son.empty()) leaf[node.layer]++;
-        for(auto sonId: node.son){
-        	tree[sonId].layer = node.layer + 1;
-        	q.push(tree[sonId]);
+constexpr int MAXN = 100;
+vector<int> nodes[MAXN];
+int leaves[MAXN];
+int BFS(const int& root, int layer) {
+    queue<int> q; 
+    for(q.push(root); !q.empty(); layer++) {
+        for(int len = q.size(); len-- > 0; q.pop()) {
+            if(nodes[q.front()].empty()) leaves[layer]++;
+            for(const int& sonId : nodes[q.front()]) q.push(sonId);
         }
     }
+    return layer-1;
 }
-
 int main() {
-    int N, M;
-    scanf("%d%d", &N, &M);
-    for (int i = 0, id, num; i < M; i++) {
-        scanf("%d%d", &id, &num);
-        for (int j = 0, sonId; j < num; j++) {
-            scanf("%d", &sonId);
-            tree[id].son.push_back(sonId);
+    int n, m, maxLayer; 
+    if(scanf("%d", &n) && n != 0) scanf("%d", &m);
+    else return 0; // The case ends with N being 0 must NOT be processed.
+    for (int i = 0, id, k; i < m && scanf("%d%d", &id, &k); i++) {
+        for(int j = 0, cid; j < k && scanf("%d", &cid); j++) {
+            nodes[id].push_back(cid);
         }
     }
-
-    BFS();
-
+    maxLayer = BFS(1, 1);
     for (int i = 1; i <= maxLayer; i++) {
-        printf("%d", leaf[i]);
-        if(i < maxLayer) printf(" ");
-        else printf("\n");
+        printf("%d%c", leaves[i], i == maxLayer?'\n':' ');
     }
     return 0;
 }

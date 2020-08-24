@@ -5,8 +5,7 @@ using namespace std;
 set<int> lonely;
 unordered_map<int, int> couple;
 int main() {
-	int n, m; 
-	scanf("%d", &n);
+	int n, m; scanf("%d", &n);
 	for(int i = 0, c1, c2; i < n; i++) {
 		scanf("%d%d", &c1, &c2);
 		couple[c1] = c2;
